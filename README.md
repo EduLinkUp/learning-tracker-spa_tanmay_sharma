@@ -1,122 +1,111 @@
 # Learning Tracker SPA
 
-A distraction-free React + TypeScript single-page app for students and self-learners to build consistent study habits.
+A modern, distraction-free learning productivity application to help students and self-learners build consistent study habits.
+
+## Author
+
+**Tanmay Sharma**
+
+## Overview
+
+Learning Tracker SPA provides a focused workflow for planning daily goals, running study sessions, tracking streaks, analyzing progress, and writing reflections. The project is fully frontend-based, with data persisted in browser storage.
+
+## Key Features
+
+- Daily goal management with categories (`coding`, `reading`, `projects`, `other`)
+- Customizable target minutes for each goal
+- Study session timer with start, pause, and stop/save actions
+- 90-day streak heatmap for consistency tracking
+- Weekly and monthly progress charts
+- Daily learning journal with date-based reflections
+- Milestone badge tracking (streaks, sessions, hours)
+- Export data as JSON and CSV
+- Light and dark theme support with saved preference
+- Responsive interface for desktop and mobile
 
 ## Tech Stack
 
-- React.js + TypeScript
+- React.js
+- TypeScript
 - React Router
-- LocalStorage API
 - Chart.js (`react-chartjs-2`)
 - `date-fns`
+- LocalStorage API
 - Vite
 
-## Features Implemented
+## Application Routes
 
-- Daily goal setting with category-based organization (`coding`, `reading`, `projects`, `other`)
-- Customizable daily target minutes per goal
-- Study session timer with `start`, `pause`, and `stop + save`
-- Streak tracking with 90-day visual heatmap calendar
-- Progress charts for weekly and monthly study trends
-- Journal page with date-wise reflection notes
-- Milestone badges (7-day streak, 30-day streak, 10 sessions, 50 study hours)
-- Motivational quote + progress insight on dashboard
-- LocalStorage persistence with data validation
-- Export data as JSON and CSV
-- Light/Dark mode with theme persistence
-- Responsive design for desktop and mobile
+- `/` — Landing page
+- `/dashboard` — Main tracker dashboard
+- `/progress` — Weekly and monthly analytics
+- `/journal` — Daily reflection notes
 
 ## Project Structure
 
 ```text
 src/
   components/
-    BadgeList.tsx
-    ExportPanel.tsx
-    GoalForm.tsx
-    GoalList.tsx
-    Header.tsx
-    Heatmap.tsx
-    ProgressCharts.tsx
-    StudyTimer.tsx
   hooks/
-    useLearningTracker.ts
-    useLocalStorage.ts
-    useTheme.ts
   pages/
-    DashboardPage.tsx
-    JournalPage.tsx
-    ProgressPage.tsx
   utils/
-    date.ts
-    exportData.ts
-    insights.ts
-    storageValidation.ts
   App.tsx
-  index.css
   main.tsx
+  index.css
   types.ts
 ```
 
-## Local Development
+## Getting Started
 
-### 1) Install dependencies
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install
 
 ```bash
 npm install
 ```
 
-### 2) Start dev server
+### Run Development Server
 
 ```bash
 npm run dev
 ```
 
-### 3) Build for production
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-### 4) Preview production build
+### Preview Production Build
 
 ```bash
 npm run preview
 ```
 
-## Data Persistence Strategy
+## Data Persistence
 
-- All app data is stored under versioned key: `learning-tracker-state-v1`
-- Theme preference stored separately under: `learning-tracker-theme`
-- `useLocalStorage` hook handles:
-  - safe parse/stringify
-  - runtime shape validation (`isLearningState`)
-  - quota/storage error handling and user-facing warning
-- React escapes journal/goal text by default, reducing XSS risk from user-generated content
+- Study data key: `learning-tracker-state-v1`
+- Theme key: `learning-tracker-theme`
+- Runtime validation is applied before using persisted state.
+- Storage write/read failures are safely handled with user-facing warnings.
 
-## Performance Considerations
+## Security and Reliability
 
-- Derived metrics are memoized in `useLearningTracker` (`useMemo`)
-- Chart datasets are memoized in `ProgressCharts`
-- Single source of truth minimizes unnecessary recalculation
+- Safe JSON serialization/deserialization for persisted data
+- Shape validation for LocalStorage payload
+- React-rendered text content to reduce XSS risk
+- Graceful fallback to default state if corrupted data is detected
 
-## Deployment (Vercel/Netlify)
+## Deployment
 
-1. Push code to a GitHub repository.
-2. Import repository in Vercel or Netlify.
-3. Build command: `npm run build`
-4. Output directory: `dist`
-5. Deploy and verify routes (`/`, `/progress`, `/journal`).
+This project can be deployed as a static site on platforms such as Vercel or Netlify.
 
-## Submission Checklist
+- Build command: `npm run build`
+- Output directory: `dist`
 
-- [ ] Create a new repo in **EduLinkUp - Developers' Capstone Organisation** and push this project
-- [ ] Deploy on Vercel/Netlify
-- [ ] Record 3-4 minute narrated demo (goal setting, timer, streak heatmap, journal, charts, export)
-- [ ] Push detailed report (`PROJECT_REPORT.md`) in the same repository
-- [ ] Submit GitHub repo link + live demo link
+## License
 
-## Notes
-
-- This project does not require authentication or backend services.
-- Storage is browser-local; clearing browser data will remove saved progress.
+This project is provided for educational and portfolio use.
