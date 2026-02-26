@@ -12,16 +12,21 @@ Learning Tracker SPA provides a focused workflow for planning daily goals, runni
 
 ## Key Features
 
-- Daily goal management with categories (`coding`, `reading`, `projects`, `other`)
+- Daily goal management with categories (`coding`, `reading`, `projects`, `revision`, `other`)
+- One-click goal templates (DSA, Reading, Projects, Revision)
 - Customizable target minutes for each goal
 - Study session timer with start, pause, and stop/save actions
+- Session notes (short note saved with each study session)
 - 90-day streak heatmap for consistency tracking
 - Weekly and monthly progress charts
 - Daily learning journal with date-based reflections
+- Calendar-based monthly journal view with quick date selection and entry indicators
 - Milestone badge tracking (streaks, sessions, hours)
-- Export data as JSON and CSV
+- Advanced insights (average session length, best day, consistency score, total hours)
+- Export and import data as JSON, export sessions as CSV
+- Optional smart reminders via browser notifications for missed daily target
 - Light and dark theme support with saved preference
-- Responsive interface for desktop and mobile
+- Responsive and accessible interface (focus states, skip link, keyboard shortcuts)
 
 ## Tech Stack
 
@@ -89,6 +94,7 @@ npm run preview
 
 - Study data key: `learning-tracker-state-v1`
 - Theme key: `learning-tracker-theme`
+- Reminder settings key: `learning-tracker-reminders`
 - Runtime validation is applied before using persisted state.
 - Storage write/read failures are safely handled with user-facing warnings.
 
@@ -98,6 +104,16 @@ npm run preview
 - Shape validation for LocalStorage payload
 - React-rendered text content to reduce XSS risk
 - Graceful fallback to default state if corrupted data is detected
+
+## Accessibility
+
+- Skip link to main content
+- Visible keyboard focus styles
+- Keyboard navigation shortcuts:
+  - `Alt + 1` Home
+  - `Alt + 2` Dashboard
+  - `Alt + 3` Progress
+  - `Alt + 4` Journal
 
 ## Deployment
 

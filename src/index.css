@@ -40,6 +40,15 @@ body {
   color: var(--text);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
 h1,
 h2,
 h3,
@@ -50,6 +59,22 @@ p {
 .app-shell {
   width: min(1200px, 95vw);
   margin: 1.5rem auto 2rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: -999px;
+  z-index: 999;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
 }
 
 .app-header {
@@ -127,6 +152,12 @@ label {
   gap: 0.45rem;
 }
 
+.inline-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .goal-form {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   align-items: end;
@@ -183,6 +214,33 @@ button:hover {
   flex-wrap: wrap;
   gap: 0.6rem;
   align-items: center;
+}
+
+.template-row {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.import-row {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.import-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#import-json {
+  position: absolute;
+  left: -9999px;
 }
 
 .goal-list {
@@ -281,6 +339,94 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
+}
+
+.insights-grid {
+  margin-top: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
+}
+
+.insights-grid article {
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: var(--surface-soft);
+  padding: 0.6rem;
+}
+
+.insights-grid p {
+  margin-top: 0.25rem;
+  font-weight: 700;
+}
+
+.reminder-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.notes-list {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.notes-list li {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.6rem;
+  background: var(--surface-soft);
+}
+
+.notes-list p {
+  margin-top: 0.3rem;
+}
+
+.calendar-header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.calendar-grid {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 0.2rem 0;
+}
+
+.calendar-day {
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--text);
+  border-radius: 0.5rem;
+  min-height: 2.2rem;
+  padding: 0.25rem;
+}
+
+.calendar-day.outside {
+  opacity: 0.55;
+}
+
+.calendar-day.selected {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+.calendar-day.has-entry {
+  box-shadow: inset 0 -3px 0 var(--success);
 }
 
 .muted {

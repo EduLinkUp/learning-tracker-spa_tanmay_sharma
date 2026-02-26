@@ -1,4 +1,4 @@
-export type Category = 'coding' | 'reading' | 'projects' | 'other'
+export type Category = 'coding' | 'reading' | 'projects' | 'revision' | 'other'
 
 export type ThemeMode = 'light' | 'dark'
 
@@ -18,6 +18,7 @@ export interface StudySession {
   endedAt: string
   durationSeconds: number
   dateKey: string
+  note?: string
 }
 
 export interface JournalEntry {

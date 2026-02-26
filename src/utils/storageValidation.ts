@@ -30,7 +30,8 @@ export const isLearningState = (value: unknown): value is LearningState => {
     isString(session.startedAt) &&
     isString(session.endedAt) &&
     isNumber(session.durationSeconds) &&
-    isString(session.dateKey),
+    isString(session.dateKey) &&
+    (session.note === undefined || isString(session.note)),
   )
 
   const validJournal = candidate.journal.every((entry) =>

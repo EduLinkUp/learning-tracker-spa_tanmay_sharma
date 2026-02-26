@@ -17,9 +17,12 @@ export const buildJsonExport = (payload: ExportPayload): string =>
   )
 
 export const buildCsvExport = (sessions: StudySession[]): string => {
-  const header = 'sessionId,goalId,date,durationSeconds\n'
+  const header = 'sessionId,goalId,date,durationSeconds,note\n'
   const rows = sessions
-    .map((session) => `${session.id},${session.goalId},${session.dateKey},${session.durationSeconds}`)
+    .map((session) => {
+      const safeNote = (session.note ?? '').replaceAll('"', '""')
+      return `${session.id},${session.goalId},${session.dateKey},${session.durationSeconds},"${safeNote}"`
+    })
     .join('\n')
 
   return `${header}${rows}`

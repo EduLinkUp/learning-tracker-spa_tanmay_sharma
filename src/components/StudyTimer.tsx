@@ -3,7 +3,7 @@ import type { Goal } from '../types'
 
 interface StudyTimerProps {
   goals: Goal[]
-  onComplete: (goalId: string, seconds: number) => void
+  onComplete: (goalId: string, seconds: number, note?: string) => void
 }
 
 const formatSeconds = (seconds: number) => {
@@ -18,6 +18,7 @@ export const StudyTimer = ({ goals, onComplete }: StudyTimerProps) => {
   const [selectedGoalId, setSelectedGoalId] = useState('')
   const [seconds, setSeconds] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
+  const [sessionNote, setSessionNote] = useState('')
 
   useEffect(() => {
     if (activeGoals.length > 0 && !selectedGoalId) {
@@ -39,11 +40,12 @@ export const StudyTimer = ({ goals, onComplete }: StudyTimerProps) => {
 
   const stopAndSave = () => {
     if (selectedGoalId && seconds > 0) {
-      onComplete(selectedGoalId, seconds)
+      onComplete(selectedGoalId, seconds, sessionNote)
     }
 
     setIsRunning(false)
     setSeconds(0)
+    setSessionNote('')
   }
 
   return (
@@ -64,6 +66,17 @@ export const StudyTimer = ({ goals, onComplete }: StudyTimerProps) => {
             </option>
           ))}
         </select>
+      </label>
+
+      <label>
+        Session Note
+        <input
+          value={sessionNote}
+          onChange={(event) => setSessionNote(event.target.value)}
+          maxLength={180}
+          placeholder="What did you study in this session?"
+          aria-label="Session note"
+        />
       </label>
 
       <div className="button-row">

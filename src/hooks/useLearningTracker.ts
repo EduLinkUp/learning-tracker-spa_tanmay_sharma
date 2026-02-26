@@ -16,6 +16,13 @@ const DEFAULT_STATE: LearningState = {
 
 const clampMinutes = (minutes: number): number => Math.max(5, Math.min(600, Math.round(minutes)))
 
+interface AdvancedInsights {
+  averageSessionMinutes: number
+  bestStudyDay: string
+  consistencyScore: number
+  totalStudyHours: number
+}
+
 export const useLearningTracker = () => {
   const { value: state, setValue: setState, storageError } = useLocalStorage<LearningState>(
     STORAGE_KEY,
@@ -61,7 +68,7 @@ export const useLearningTracker = () => {
     }))
   }
 
-  const addSession = (goalId: string, durationSeconds: number) => {
+  const addSession = (goalId: string, durationSeconds: number, note?: string) => {
     if (durationSeconds <= 0) {
       return
     }
@@ -74,6 +81,7 @@ export const useLearningTracker = () => {
       endedAt: now.toISOString(),
       durationSeconds,
       dateKey: toDateKey(now),
+      note: note?.trim().slice(0, 180),
     }
 
     setState((previous) => ({ ...previous, sessions: [session, ...previous.sessions] }))
@@ -101,6 +109,20 @@ export const useLearningTracker = () => {
         ),
       }
     })
+  }
+
+  const importState = (payload: unknown): boolean => {
+    if (!isLearningState(payload)) {
+      return false
+    }
+
+    setState({
+      goals: payload.goals,
+      sessions: payload.sessions,
+      journal: payload.journal,
+    })
+
+    return true
   }
 
   const todayKey = getTodayKey()
@@ -178,6 +200,27 @@ export const useLearningTracker = () => {
 
   const weeklyMinutes = weeklyTrend.reduce((sum, point) => sum + point.minutes, 0)
 
+  const advancedInsights = useMemo<AdvancedInsights>(() => {
+    const totalMinutes = state.sessions.reduce((sum, session) => sum + Math.round(session.durationSeconds / 60), 0)
+    const averageSessionMinutes = state.sessions.length === 0 ? 0 : Math.round(totalMinutes / state.sessions.length)
+
+    const bestDay = weeklyTrend.reduce(
+      (best, current) => (current.minutes > best.minutes ? current : best),
+      { label: 'N/A', minutes: 0 },
+    )
+
+    const recent30 = dailyHeatmap.slice(-30)
+    const activeDays = recent30.filter((item) => item.minutes > 0).length
+    const consistencyScore = Math.round((activeDays / Math.max(1, recent30.length)) * 100)
+
+    return {
+      averageSessionMinutes,
+      bestStudyDay: bestDay.minutes > 0 ? bestDay.label : 'N/A',
+      consistencyScore,
+      totalStudyHours: Math.round((totalMinutes / 60) * 10) / 10,
+    }
+  }, [dailyHeatmap, state.sessions, weeklyTrend])
+
   const milestones = useMemo(
     () => [
       { label: '7-day streak', unlocked: streakDays >= 7 },
@@ -197,6 +240,19 @@ export const useLearningTracker = () => {
     return map
   }, [state.journal])
 
+  const recentSessionNotes = useMemo(
+    () =>
+      state.sessions
+        .filter((session) => (session.note ?? '').trim().length > 0)
+        .slice(0, 5)
+        .map((session) => ({
+          id: session.id,
+          dateKey: session.dateKey,
+          note: session.note ?? '',
+        })),
+    [state.sessions],
+  )
+
   return {
     goals: state.goals,
     sessions: state.sessions,
@@ -209,14 +265,17 @@ export const useLearningTracker = () => {
     weeklyTrend,
     monthlyTrend,
     weeklyMinutes,
+    advancedInsights,
     milestones,
     quote,
     insight,
     journalByDate,
+    recentSessionNotes,
     addGoal,
     updateGoalTarget,
     toggleGoalActive,
     addSession,
     upsertJournalEntry,
+    importState,
   }
 }

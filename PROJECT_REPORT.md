@@ -4,7 +4,7 @@
 
 Learning Tracker SPA is a frontend-first habit-building tool designed for students and self-learners who want to build consistency in daily study. The project intentionally avoids backend complexity and authentication to keep the learning experience lightweight, private, and fast. It focuses on practical behavior loops: set a target, track focused sessions, view progress trends, and write short reflections.
 
-The application is built with React.js and TypeScript using a modular architecture with custom hooks for state management and LocalStorage persistence. The app provides study timer controls, streak heatmap visualization, chart-based analytics, and export capabilities for personal backup and external analysis. The interface is responsive and supports dark/light theme persistence.
+The application is built with React.js and TypeScript using a modular architecture with custom hooks for state management and LocalStorage persistence. The app provides study timer controls, session notes, streak heatmap visualization, chart-based analytics, calendar-based journal navigation, smart reminder notifications, and export/import capabilities for personal backup and analysis. The interface is responsive and supports dark/light theme persistence.
 
 The result is a self-contained SPA optimized for low friction and habit continuity.
 
@@ -70,19 +70,21 @@ The codebase follows a layered structure:
 ### 4.1 Key Components
 
 - `GoalForm`: add goal with category and daily target
+- `GoalForm`: add goal with category and daily target, and apply one-click templates
 - `GoalList`: activate/deactivate goals and edit target minutes
-- `StudyTimer`: start/pause/stop learning sessions and save durations
+- `StudyTimer`: start/pause/stop learning sessions, save durations, and attach session notes
 - `Heatmap`: visual map of 90-day learning intensity
 - `ProgressCharts`: weekly line chart and monthly bar chart
 - `BadgeList`: achievement milestones
-- `ExportPanel`: JSON/CSV downloads
+- `ExportPanel`: JSON/CSV downloads with JSON import
+- `ReminderPanel`: optional smart reminder controls for browser notifications
 - `Header`: route navigation and theme switch
 
 ### 4.2 Page Composition
 
 - `DashboardPage`: KPI stats, goal management, timer, heatmap, badges, export
 - `ProgressPage`: trend analytics and weekly overview
-- `JournalPage`: date-based reflection entry with save confirmation
+- `JournalPage`: monthly calendar view + date-based reflection entry with save confirmation
 
 ---
 
@@ -113,6 +115,8 @@ This approach keeps data flow explicit and easy to maintain for an easy-level fr
 - `streakDays` (consecutive active days)
 - 90-day heatmap data
 - `weeklyTrend` and `monthlyTrend`
+- `advancedInsights` (average session duration, best day, consistency score, total hours)
+- `recentSessionNotes`
 - milestone unlock states
 - motivational quote and progress insight text
 
@@ -137,6 +141,10 @@ Data shape:
 Theme mode is separated under:
 
 - `learning-tracker-theme`
+
+Reminder settings are persisted under:
+
+- `learning-tracker-reminders`
 
 This separation keeps UI preference independent from study data lifecycle.
 
@@ -164,7 +172,11 @@ Users can add goals with title, category, and daily target minutes. Goals can be
 
 ### 7.2 Study Timer
 
-The timer tracks elapsed seconds in one-second intervals. On stop, a session record is persisted with date key and duration. This makes streak and chart calculations deterministic.
+The timer tracks elapsed seconds in one-second intervals. On stop, a session record is persisted with date key, duration, and an optional note describing what was studied. This strengthens reflection quality and makes streak/chart calculations deterministic.
+
+### 7.2.1 Smart Reminders
+
+Users can enable optional browser notifications and choose a reminder hour (24h format). If daily progress has not reached the active target after the reminder hour, a notification is shown once for that day.
 
 ### 7.3 Streak and Heatmap
 
@@ -179,12 +191,20 @@ Both use memoized datasets to avoid unnecessary chart object recreation.
 
 ### 7.5 Journal
 
-Journal entries are upserted by date key. Existing entries are replaced rather than duplicated. This keeps one reflection per day and simplifies UX.
+Journal entries are upserted by date key. Existing entries are replaced rather than duplicated. This keeps one reflection per day and simplifies UX. A calendar month view allows quick date selection and visually indicates which days already contain reflections.
 
 ### 7.6 Export
 
 - JSON export: complete state snapshot for backup/restore analysis
 - CSV export: session-level rows suitable for spreadsheets
+
+### 7.7 Import
+
+Users can import a previously exported JSON snapshot. Imported payloads pass runtime validation before replacing state.
+
+### 7.8 Goal Templates
+
+The dashboard includes one-click goal templates for common study patterns (DSA, Reading, Projects, Revision), reducing setup friction for first-time users.
 
 ---
 
@@ -198,6 +218,8 @@ The UX was intentionally designed around behavior design principles:
 4. **Reflection loop:** journal supports daily review and metacognition.
 5. **Motivation support:** quote + insight text reinforce continuation.
 6. **Minimal distractions:** no auth flow, no complex menus, no backend latency.
+7. **Fast setup:** one-click templates reduce initial decision fatigue.
+8. **Memory support:** session notes and journal calendar make past work easy to recall.
 
 Responsive layout ensures that daily check-ins are convenient on mobile.
 
@@ -211,17 +233,20 @@ Responsive layout ensures that daily check-ins are convenient on mobile.
 - Input length limits for goal titles and journal content
 - Safe rendering through React escaping
 - Controlled export format generation
+- Import validation before state replacement
 
 ### 9.2 Monitoring and Logging
 
 - Storage read/write issues logged to console
 - User-facing warnings for storage failures
 - Save-state confirmation in journal UI
+- Import status feedback messages
 
 ### 9.3 Reliability Considerations
 
 - App remains functional with default state if storage parsing fails
 - Data model is simple and migration-friendly due to versioned key naming
+- Reminder notifications are throttled per day to avoid repeated prompts
 
 ---
 
@@ -237,6 +262,7 @@ Responsive layout ensures that daily check-ins are convenient on mobile.
 
 - `useMemo` for expensive derived calculations
 - Memoized chart datasets
+- Memoized derived analytics and session-note summaries
 - Single centralized state avoids redundant source-of-truth duplication
 
 ### 10.3 Scaling Notes
@@ -266,6 +292,7 @@ The app is deployment-ready for static hosts.
 3. Sessions and journal survive refresh.
 4. Exports download correctly.
 5. Mobile viewport layout remains usable.
+6. Reminder settings persist and notifications trigger as expected.
 
 ---
 
@@ -305,11 +332,10 @@ The app is deployment-ready for static hosts.
 
 Potential non-breaking enhancements include:
 
-- import workflow for previously exported JSON
 - configurable badge rules
 - pomodoro presets in timer
-- optional reminders and notifications
-- accessibility pass with keyboard shortcuts and ARIA audits
+- rich-text journal formatting
+- analytics filters by category/date range
 
 ---
 
