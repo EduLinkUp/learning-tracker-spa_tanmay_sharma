@@ -111,7 +111,7 @@ p {
 
 .page-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .stats-grid {
@@ -127,6 +127,11 @@ p {
   border-radius: 0.9rem;
   padding: 1rem;
   box-shadow: 0 10px 25px -22px rgba(18, 34, 60, 0.65);
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
 }
 
 .stat-card p {
@@ -216,6 +221,12 @@ button:hover {
   align-items: center;
 }
 
+.button-row > button,
+.button-row > .import-label {
+  min-height: 2.3rem;
+  padding: 0.55rem 0.85rem;
+}
+
 .template-row {
   margin-top: 0.65rem;
   display: flex;
@@ -224,11 +235,15 @@ button:hover {
 }
 
 .import-row {
-  margin-top: 0.8rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.55rem;
+  margin-top: 0.1rem;
+}
+
+.import-status {
+  margin-top: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--surface-soft);
 }
 
 .import-label {
@@ -236,6 +251,9 @@ button:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border-radius: 0.6rem;
+  font-weight: 500;
+  text-align: center;
 }
 
 #import-json {
@@ -276,6 +294,21 @@ button:hover {
   margin-bottom: 0.8rem;
   font-size: 2rem;
   font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.timer-card label + label {
+  margin-top: 0.55rem;
+}
+
+.timer-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.timer-actions button {
+  width: 100%;
 }
 
 .heatmap-grid {
@@ -363,9 +396,33 @@ button:hover {
 .reminder-grid {
   margin-top: 0.75rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 0.75rem;
   align-items: end;
+}
+
+.permission-row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.permission-text {
+  margin-top: 0.15rem;
+}
+
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+}
+
+.dashboard-column {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.export-actions {
+  margin-top: 0.65rem;
 }
 
 .notes-list {
@@ -385,6 +442,7 @@ button:hover {
 
 .notes-list p {
   margin-top: 0.3rem;
+  color: var(--muted);
 }
 
 .calendar-header {
@@ -540,5 +598,10 @@ button:hover {
 
   .quote-card {
     grid-template-columns: 1fr auto;
+  }
+
+  .dashboard-columns {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: start;
   }
 }
