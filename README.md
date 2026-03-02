@@ -124,4 +124,4 @@ This project can be deployed as a static site on platforms such as Vercel or Net
 
 ## License
 
-This project is provided for educational and portfolio use.
+This project is made for internship project submission.
